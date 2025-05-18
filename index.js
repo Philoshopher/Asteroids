@@ -6,11 +6,13 @@ canvas.width = window.innerWidth;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.fillStyle = 'black';
 
+//!!    PLAYER CLASS CREATION WITH MSTHODS ANS THE INITIALIZATION   !!\\
 class Player {
   constructor({ position, velocity, color }) {
     this.position = position;
     this.velocity = velocity;
     this.color = color;
+    this.render();
   }
   render() {
     ctx.beginPath();
@@ -20,6 +22,11 @@ class Player {
     ctx.closePath();
     ctx.strokeStyle = this.color;
     ctx.stroke();
+  }
+  move() {
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.render();
   }
 }
 
@@ -32,7 +39,48 @@ const player = new Player({
     x: 0,
     y: 0,
   },
-  color: 'white',
+  color: 'Red',
 });
 
-player.render();
+//!!    MEVEMENT FUNCTIONALITIES    !!\\
+let keys = {
+  w: false,
+  s: false,
+  a: false,
+  d: false,
+};
+function animateMovement() {
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'black';
+  window.requestAnimationFrame(animateMovement);
+  if (keys.w) {
+    player.velocity.x = 1;
+  } else if (keys.s) {
+    player.velocity.x = -1;
+  } else {
+    player.velocity.x = 0;
+  }
+  player.move();
+}
+animateMovement();
+
+window.addEventListener('keydown', (key) => {
+  switch (key.code) {
+    case 'KeyW':
+      keys.w = true; //Horizontal movements
+      break;
+    case 'KeyS':
+      keys.s = true;
+      break;
+  }
+});
+window.addEventListener('keyup', (key) => {
+  switch (key.code) {
+    case 'KeyW':
+      keys.w = false;
+      break;
+    case 'KeyS':
+      keys.s = false;
+      break;
+  }
+});
