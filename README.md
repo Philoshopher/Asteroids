@@ -1,1 +1,1 @@
-# This is a guided project 'Aestroids'
+# This is a guided project 'Asteroids'
