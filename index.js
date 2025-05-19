@@ -11,10 +11,14 @@ class Player {
   constructor({ position, velocity, color }) {
     this.position = position;
     this.velocity = velocity;
+    this.rotation = 0;
     this.color = color;
     this.render();
   }
   render() {
+    ctx.translate(this.position.x, this.position.y);
+    ctx.rotate(this.rotation);
+    ctx.translate(-this.position.x, -this.position.y);
     ctx.beginPath();
     ctx.moveTo(this.position.x, this.position.y);
     ctx.lineTo(this.position.x - 25, this.position.y + 10);
@@ -22,6 +26,7 @@ class Player {
     ctx.closePath();
     ctx.strokeStyle = this.color;
     ctx.stroke();
+    ctx.restore();
   }
   move() {
     this.position.x += this.velocity.x;
@@ -53,13 +58,20 @@ function animateMovement() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = 'black';
   window.requestAnimationFrame(animateMovement);
+
   if (keys.w) {
-    player.velocity.x = 1;
-  } else if (keys.s) {
-    player.velocity.x = -1;
+    player.velocity.x = 1.5;
   } else {
-    player.velocity.x = 0;
+    player.velocity.x = player.velocity.x * 0.75;
   }
+  if (keys.a) {
+    player.rotation += 0.001;
+  } else if (keys.d) {
+    player.rotation -= 0.001;
+  } else {
+    player.rotation = 0;
+  }
+
   player.move();
 }
 animateMovement();
@@ -72,6 +84,12 @@ window.addEventListener('keydown', (key) => {
     case 'KeyS':
       keys.s = true;
       break;
+    case 'KeyA':
+      keys.a = true; //Horizontal movements
+      break;
+    case 'KeyD':
+      keys.d = true;
+      break;
   }
 });
 window.addEventListener('keyup', (key) => {
@@ -81,6 +99,12 @@ window.addEventListener('keyup', (key) => {
       break;
     case 'KeyS':
       keys.s = false;
+      break;
+    case 'KeyA':
+      keys.a = false; //Horizontal movements
+      break;
+    case 'KeyD':
+      keys.d = false;
       break;
   }
 });
