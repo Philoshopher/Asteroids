@@ -13,6 +13,7 @@ class Player {
     this.velocity = velocity;
     this.rotation = 0;
     this.color = color;
+    this.speed = 1.5;
     this.render();
   }
   render() {
@@ -60,7 +61,8 @@ function animateMovement() {
   window.requestAnimationFrame(animateMovement);
 
   if (keys.w) {
-    player.velocity.x = 1.5;
+    player.velocity.x = Math.cos(player.rotation) * player.speed;
+    player.velocity.y = Math.sin(player.rotation) * player.speed;
   } else {
     player.velocity.x = player.velocity.x * 0.75;
   }
